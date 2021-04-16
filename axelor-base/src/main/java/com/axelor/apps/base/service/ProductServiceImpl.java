@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -169,15 +169,18 @@ public class ProductServiceImpl implements ProductService {
     int seq = 1;
 
     List<Product> productVariantsList =
-        productRepo.all().filter("self.parentProduct = ?1", productModel).order("code").fetch();
+        productRepo.all().filter("self.parentProduct = ?1", productModel).fetch();
 
     if (productVariantsList != null && !productVariantsList.isEmpty()) {
-
-      seq =
-          Integer.parseInt(
-                  StringUtils.substringAfterLast(
-                      productVariantsList.get(productVariantsList.size() - 1).getCode(), "-"))
-              + 1;
+      Integer lastSeq = 0;
+      for (Product product : productVariantsList) {
+        Integer productSeq =
+            Integer.parseInt(StringUtils.substringAfterLast(product.getCode(), "-"));
+        if (productSeq.compareTo(lastSeq) > 0) {
+          lastSeq = productSeq;
+        }
+      }
+      seq = lastSeq + 1;
     }
 
     for (ProductVariant productVariant : productVariantList) {

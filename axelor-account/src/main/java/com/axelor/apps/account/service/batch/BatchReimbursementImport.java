@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -45,7 +45,7 @@ public class BatchReimbursementImport extends BatchStrategy {
 
   private final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-  protected boolean stop = false;
+  protected boolean end = false;
 
   protected BigDecimal totalAmount = BigDecimal.ZERO;
 
@@ -79,14 +79,14 @@ public class BatchReimbursementImport extends BatchStrategy {
           ExceptionOriginRepository.REIMBURSEMENT,
           batch.getId());
       incrementAnomaly();
-      stop = true;
+      end = true;
     }
     checkPoint();
   }
 
   @Override
   protected void process() {
-    if (!stop) {
+    if (!end) {
 
       Company company = batch.getAccountingBatch().getCompany();
 

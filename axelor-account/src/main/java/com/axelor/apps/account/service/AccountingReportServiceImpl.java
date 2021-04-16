@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -70,7 +70,7 @@ public class AccountingReportServiceImpl implements AccountingReportService {
 
   protected AccountRepository accountRepo;
 
-  protected List<Object> params = new ArrayList<Object>();
+  protected List<Object> params = new ArrayList<>();
   protected int paramNumber = 1;
 
   @Inject
@@ -83,7 +83,6 @@ public class AccountingReportServiceImpl implements AccountingReportService {
     this.appBaseService = appBaseService;
   }
 
-  @SuppressWarnings("unchecked")
   public String getMoveLineList(AccountingReport accountingReport) throws AxelorException {
 
     this.buildQuery(accountingReport);
@@ -181,7 +180,7 @@ public class AccountingReportServiceImpl implements AccountingReportService {
     }
 
     if (accountingReport.getTypeSelect() == AccountingReportRepository.REPORT_AGED_BALANCE) {
-      this.addParams("self.account is null or self.account.reconcileOk = 'true'");
+      this.addParams("(self.account is null OR self.account.reconcileOk = 'true')");
       this.addParams("self.amountRemaining > 0 AND self.debit > 0");
     }
 
@@ -191,13 +190,13 @@ public class AccountingReportServiceImpl implements AccountingReportService {
     }
 
     if (accountingReport.getTypeSelect() == AccountingReportRepository.REPORT_BALANCE) {
-      this.addParams("self.account is null or self.account.reconcileOk = 'true'");
+      this.addParams("(self.account is null OR self.account.reconcileOk = 'true')");
     }
 
     if (accountingReport.getTypeSelect() == AccountingReportRepository.REPORT_CASH_PAYMENTS) {
       this.addParams("self.move.paymentMode.typeSelect = ?%d", PaymentModeRepository.TYPE_CASH);
       this.addParams("self.credit > 0");
-      this.addParams("self.account is null or self.account.reconcileOk = 'true'");
+      this.addParams("(self.account is null OR self.account.reconcileOk = 'true')");
     }
 
     if (accountingReport.getTypeSelect() == AccountingReportRepository.REPORT_PAYMENT_DIFFERENCES) {
@@ -258,7 +257,7 @@ public class AccountingReportServiceImpl implements AccountingReportService {
   protected void initQuery() {
     query = "";
     paramNumber = 1;
-    params = new ArrayList<Object>();
+    params = new ArrayList<>();
 
     this.query = "";
     this.params.clear();

@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -44,6 +44,7 @@ public class ProjectPlanningTimeController {
 
     Collection<Map<String, Object>> users =
         (Collection<Map<String, Object>>) context.get("userSet");
+    Map<String, Object> project = (Map<String, Object>) context.get("_project");
 
     String userIds = "";
     if (users != null) {
@@ -56,13 +57,22 @@ public class ProjectPlanningTimeController {
       }
     }
 
+    String projectId = "";
+    if (project != null && project.get("id") != null) {
+      projectId = project.get("id").toString();
+    }
+
     ActionViewBuilder builder =
         ActionView.define(I18n.get("Project Planning time"))
             .model(ProjectPlanningTime.class.getName());
     String url = "project/planning";
 
-    if (!userIds.isEmpty()) {
+    if (!userIds.isEmpty() && !projectId.isEmpty()) {
+      url += "?userIds=" + userIds + "&projectIds=" + projectId;
+    } else if (!userIds.isEmpty()) {
       url += "?userIds=" + userIds;
+    } else if (!projectId.isEmpty()) {
+      url += "?projectIds=" + projectId;
     }
 
     builder.add("html", url);

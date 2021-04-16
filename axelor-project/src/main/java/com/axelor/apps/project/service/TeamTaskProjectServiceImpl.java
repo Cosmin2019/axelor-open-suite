@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -24,6 +24,7 @@ import com.axelor.auth.db.User;
 import com.axelor.team.db.TeamTask;
 import com.axelor.team.db.repo.TeamTaskRepository;
 import com.google.inject.Inject;
+import com.google.inject.persist.Transactional;
 import java.time.LocalDate;
 
 public class TeamTaskProjectServiceImpl extends TeamTaskServiceImpl
@@ -39,6 +40,7 @@ public class TeamTaskProjectServiceImpl extends TeamTaskServiceImpl
   }
 
   @Override
+  @Transactional
   public TeamTask create(String subject, Project project, User assignedTo) {
     TeamTask task = new TeamTask();
     task.setName(subject);
@@ -47,6 +49,7 @@ public class TeamTaskProjectServiceImpl extends TeamTaskServiceImpl
     task.setStatus("new");
     task.setPriority("normal");
     project.addTeamTaskListItem(task);
+    teamTaskRepo.save(task);
     return task;
   }
 
@@ -80,5 +83,11 @@ public class TeamTaskProjectServiceImpl extends TeamTaskServiceImpl
     nextTeamTask.setTaskEndDate(teamTask.getTaskEndDate());
     nextTeamTask.setBudgetedTime(teamTask.getBudgetedTime());
     nextTeamTask.setCurrency(teamTask.getCurrency());
+  }
+
+  @Override
+  @Transactional
+  public void deleteTeamTask(TeamTask teamTask) {
+    teamTaskRepo.remove(teamTask);
   }
 }

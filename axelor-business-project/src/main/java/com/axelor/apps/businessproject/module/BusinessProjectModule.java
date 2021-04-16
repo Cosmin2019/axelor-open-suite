@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -33,9 +33,12 @@ import com.axelor.apps.businessproject.service.ExpenseServiceProjectImpl;
 import com.axelor.apps.businessproject.service.InvoiceLineProjectService;
 import com.axelor.apps.businessproject.service.InvoiceLineProjectServiceImpl;
 import com.axelor.apps.businessproject.service.InvoicePaymentValidateProjectServiceImpl;
+import com.axelor.apps.businessproject.service.InvoiceServiceProject;
 import com.axelor.apps.businessproject.service.InvoiceServiceProjectImpl;
 import com.axelor.apps.businessproject.service.ProductTaskTemplateService;
 import com.axelor.apps.businessproject.service.ProductTaskTemplateServiceImpl;
+import com.axelor.apps.businessproject.service.ProjectAnalyticMoveLineService;
+import com.axelor.apps.businessproject.service.ProjectAnalyticMoveLineServiceImpl;
 import com.axelor.apps.businessproject.service.ProjectBusinessService;
 import com.axelor.apps.businessproject.service.ProjectBusinessServiceImpl;
 import com.axelor.apps.businessproject.service.ProjectContractServiceImpl;
@@ -46,6 +49,7 @@ import com.axelor.apps.businessproject.service.ProjectStockMoveInvoiceServiceImp
 import com.axelor.apps.businessproject.service.PurchaseOrderInvoiceProjectServiceImpl;
 import com.axelor.apps.businessproject.service.PurchaseOrderLineProjectService;
 import com.axelor.apps.businessproject.service.PurchaseOrderLineServiceProjectImpl;
+import com.axelor.apps.businessproject.service.PurchaseOrderWorkflowServiceProjectImpl;
 import com.axelor.apps.businessproject.service.SaleOrderInvoiceProjectServiceImpl;
 import com.axelor.apps.businessproject.service.SaleOrderLineProjectService;
 import com.axelor.apps.businessproject.service.SaleOrderLineProjectServiceImpl;
@@ -73,6 +77,7 @@ import com.axelor.apps.supplychain.db.repo.SaleOrderSupplychainRepository;
 import com.axelor.apps.supplychain.service.InvoiceLineSupplychainService;
 import com.axelor.apps.supplychain.service.PurchaseOrderInvoiceServiceImpl;
 import com.axelor.apps.supplychain.service.PurchaseOrderLineServiceSupplychainImpl;
+import com.axelor.apps.supplychain.service.PurchaseOrderWorkflowServiceSupplychainImpl;
 import com.axelor.apps.supplychain.service.SaleOrderInvoiceServiceImpl;
 import com.axelor.apps.supplychain.service.SaleOrderLineServiceSupplyChainImpl;
 import com.axelor.apps.supplychain.service.SaleOrderPurchaseServiceImpl;
@@ -97,6 +102,7 @@ public class BusinessProjectModule extends AxelorModule {
     bind(InvoicingProjectRepository.class).to(InvoicingProjectManagementRepository.class);
     bind(AppBusinessProjectService.class).to(AppBusinessProjectServiceImpl.class);
     bind(InvoiceServiceSupplychainImpl.class).to(InvoiceServiceProjectImpl.class);
+    bind(InvoiceServiceProject.class).to(InvoiceServiceProjectImpl.class);
     bind(TeamTaskProjectServiceImpl.class).to(TeamTaskBusinessProjectServiceImpl.class);
     bind(TeamTaskBusinessProjectService.class).to(TeamTaskBusinessProjectServiceImpl.class);
     bind(SaleOrderSupplychainRepository.class).to(SaleOrderProjectRepository.class);
@@ -125,5 +131,8 @@ public class BusinessProjectModule extends AxelorModule {
     bind(InvoicePaymentValidateServiceBankPayImpl.class)
         .to(InvoicePaymentValidateProjectServiceImpl.class);
     bind(ProjectFolderService.class).to(ProjectFolderServiceImpl.class);
+    bind(ProjectAnalyticMoveLineService.class).to(ProjectAnalyticMoveLineServiceImpl.class);
+    bind(PurchaseOrderWorkflowServiceSupplychainImpl.class)
+        .to(PurchaseOrderWorkflowServiceProjectImpl.class);
   }
 }

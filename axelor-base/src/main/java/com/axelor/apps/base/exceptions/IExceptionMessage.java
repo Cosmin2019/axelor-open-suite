@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -401,6 +401,8 @@ public interface IExceptionMessage {
   public static final String ADVANCED_IMPORT_NO_RESET = /*$$(*/ "No imported data to reset" /*)*/;
   public static final String SERVER_CONNECTION_ERROR = /*$$(*/
       "Unable to connect to Geonames server" /*)*/;
+  public static final String DUPLICATE_ACTIVE_BANK_DETAILS = /*$$(*/
+      "The same bank details are already active." /*)*/;
 
   /* Print template */
   public static final String PRINT_TEMPLATE_CONDITION_MUST_BE_BOOLEAN = /*$$(*/
@@ -411,4 +413,8 @@ public interface IExceptionMessage {
       "Error in print template line with sequence %s and title %s." /*)*/;
   public static final String PRINT_TEMPLATE_LINE_TEST_REFRESH = /*$$(*/
       "Refresh page to reflect changes in selection" /*)*/;
+
+  /* Scheduler */
+  public static final String QUARTZ_SCHEDULER_ENABLED = /*$$(*/
+      "The scheduler service is enabled." /*)*/;
 }

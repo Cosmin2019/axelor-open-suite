@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -35,6 +35,7 @@ import com.axelor.apps.base.service.administration.SequenceService;
 import com.axelor.apps.base.service.app.AppBaseService;
 import com.axelor.apps.message.db.EmailAddress;
 import com.axelor.auth.AuthUtils;
+import com.axelor.auth.db.User;
 import com.axelor.common.StringUtils;
 import com.axelor.db.JPA;
 import com.axelor.db.Query;
@@ -53,6 +54,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
 import javax.inject.Singleton;
@@ -84,7 +86,8 @@ public class PartnerServiceImpl implements PartnerService {
       EmailAddress emailAddress,
       Currency currency,
       Address deliveryAddress,
-      Address mainInvoicingAddress) {
+      Address mainInvoicingAddress,
+      boolean createContact) {
     Partner partner = new Partner();
 
     partner.setName(name);
@@ -97,14 +100,18 @@ public class PartnerServiceImpl implements PartnerService {
     partner.setCurrency(currency);
     this.setPartnerFullName(partner);
 
-    Partner contact = new Partner();
-    contact.setPartnerTypeSelect(PARTNER_TYPE_INDIVIDUAL);
-    contact.setIsContact(true);
-    contact.setName(name);
-    contact.setFirstName(firstName);
-    contact.setMainPartner(partner);
-    partner.addContactPartnerSetItem(contact);
-    this.setPartnerFullName(contact);
+    if (createContact) {
+      Partner contact =
+          this.createContact(
+              partner,
+              name,
+              firstName,
+              fixedPhone,
+              mobilePhone,
+              emailAddress != null ? new EmailAddress(emailAddress.getAddress()) : null,
+              mainInvoicingAddress);
+      partner.addContactPartnerSetItem(contact);
+    }
 
     if (deliveryAddress == mainInvoicingAddress) {
       addPartnerAddress(partner, mainInvoicingAddress, true, true, true);
@@ -112,6 +119,28 @@ public class PartnerServiceImpl implements PartnerService {
       addPartnerAddress(partner, deliveryAddress, true, false, true);
       addPartnerAddress(partner, mainInvoicingAddress, true, true, false);
     }
+
+    return partner;
+  }
+
+  public Partner createContact(
+      Partner partner,
+      String name,
+      String firstName,
+      String fixedPhone,
+      String mobilePhone,
+      EmailAddress emailAddress,
+      Address mainAddress) {
+
+    Partner contact = new Partner();
+    contact.setPartnerTypeSelect(PARTNER_TYPE_INDIVIDUAL);
+    contact.setIsContact(true);
+    contact.setName(name);
+    contact.setFirstName(firstName);
+    contact.setMainPartner(partner);
+    contact.setEmailAddress(emailAddress);
+    contact.setMainAddress(mainAddress);
+    this.setPartnerFullName(contact);
 
     return partner;
   }
@@ -552,7 +581,9 @@ public class PartnerServiceImpl implements PartnerService {
       return null;
     }
     LocalDate today =
-        Beans.get(AppBaseService.class).getTodayDate(AuthUtils.getUser().getActiveCompany());
+        Beans.get(AppBaseService.class)
+            .getTodayDate(
+                Optional.ofNullable(AuthUtils.getUser()).map(User::getActiveCompany).orElse(null));
     List<PriceList> candidatePriceListList = new ArrayList<>();
     for (PriceList priceList : priceListSet) {
       LocalDate beginDate =

@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -20,6 +20,7 @@ package com.axelor.apps.supplychain.web;
 import com.axelor.apps.account.service.app.AppAccountService;
 import com.axelor.apps.purchase.db.PurchaseOrder;
 import com.axelor.apps.purchase.db.PurchaseOrderLine;
+import com.axelor.apps.supplychain.service.PurchaseOrderLineServiceSupplyChain;
 import com.axelor.apps.supplychain.service.PurchaseOrderLineServiceSupplychainImpl;
 import com.axelor.exception.AxelorException;
 import com.axelor.inject.Beans;
@@ -47,7 +48,7 @@ public class PurchaseOrderLineController {
     PurchaseOrderLine purchaseOrderLine = request.getContext().asType(PurchaseOrderLine.class);
 
     purchaseOrderLine =
-        Beans.get(PurchaseOrderLineServiceSupplychainImpl.class)
+        Beans.get(PurchaseOrderLineServiceSupplyChain.class)
             .createAnalyticDistributionWithTemplate(purchaseOrderLine);
     response.setValue("analyticMoveLineList", purchaseOrderLine.getAnalyticMoveLineList());
   }

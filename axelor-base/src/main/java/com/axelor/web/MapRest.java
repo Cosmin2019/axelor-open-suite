@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -26,6 +26,7 @@ import com.axelor.apps.base.service.MapRestService;
 import com.axelor.apps.base.service.PartnerService;
 import com.axelor.apps.tool.service.TranslationService;
 import com.axelor.auth.AuthUtils;
+import com.axelor.auth.db.User;
 import com.axelor.common.StringUtils;
 import com.axelor.exception.AxelorException;
 import com.axelor.exception.db.repo.TraceBackRepository;
@@ -38,6 +39,7 @@ import com.google.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -334,7 +336,7 @@ public class MapRest {
 
     ObjectNode mainNode = nodeFactory.objectNode();
 
-    String language = AuthUtils.getUser().getLanguage();
+    String language = Optional.ofNullable(AuthUtils.getUser()).map(User::getLanguage).orElse(null);
     String translation = translationService.getTranslation(key, language);
 
     if (translation.equals(key)) {

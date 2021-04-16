@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -87,8 +87,6 @@ public class ExportDbObjectService {
 
   @Transactional
   public MetaFile exportObject() {
-
-    //		group = AuthUtils.getUser().getGroup();
     group = Beans.get(GroupRepository.class).all().filter("self.code = 'admins'").fetchOne();
     try {
       log.debug("Attachment dir: {}", AppSettings.get().get("file.upload.dir"));
@@ -116,10 +114,13 @@ public class ExportDbObjectService {
       metaFile = Beans.get(MetaFileRepository.class).save(metaFile);
 
       SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-
       saxParserFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-      updateObjectMap(
-          Arrays.asList(moduleDir.listFiles()), saxParserFactory.newSAXParser(), new XmlHandler());
+
+      SAXParser parser = saxParserFactory.newSAXParser();
+      parser.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+      parser.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+
+      updateObjectMap(Arrays.asList(moduleDir.listFiles()), parser, new XmlHandler());
 
       writeObjects(MetaFiles.getPath(metaFile).toFile());
 

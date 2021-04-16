@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -154,9 +154,11 @@ public class ConfiguratorCreatorServiceImpl implements ConfiguratorCreatorServic
       case "boolean":
         return true;
       case "datetime":
-        return appBaseService.getTodayDateTime(AuthUtils.getUser().getActiveCompany());
+        return appBaseService.getTodayDateTime(
+            Optional.ofNullable(AuthUtils.getUser()).map(User::getActiveCompany).orElse(null));
       case "date":
-        return appBaseService.getTodayDate(AuthUtils.getUser().getActiveCompany());
+        return appBaseService.getTodayDate(
+            Optional.ofNullable(AuthUtils.getUser()).map(User::getActiveCompany).orElse(null));
       case "time":
         return LocalTime.now();
       case "panel":
@@ -406,8 +408,9 @@ public class ConfiguratorCreatorServiceImpl implements ConfiguratorCreatorServic
 
   @Override
   @Transactional
-  public void authorizeUser(ConfiguratorCreator creator, User user) {
-    creator.addAuthorizedUserSetItem(user);
+  public void init(ConfiguratorCreator creator) {
+    creator.addAuthorizedUserSetItem(AuthUtils.getUser());
+    addRequiredFormulas(creator);
   }
 
   @Override
@@ -423,7 +426,6 @@ public class ConfiguratorCreatorServiceImpl implements ConfiguratorCreatorServic
         creator.addConfiguratorSOLineFormulaListItem(createSOLineFormula(field.getName()));
       }
     }
-    configuratorCreatorRepo.save(creator);
   }
 
   /**

@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -53,9 +53,10 @@ public class ProjectController {
       Project project = request.getContext().asType(Project.class);
       SaleOrder order = Beans.get(ProjectBusinessService.class).generateQuotation(project);
       response.setView(
-          ActionView.define("Sale Order")
+          ActionView.define(I18n.get("Sale quotation"))
               .model(SaleOrder.class.getName())
               .add("form", "sale-order-form")
+              .param("forceTitle", "true")
               .context("_showRecord", String.valueOf(order.getId()))
               .map());
     } catch (Exception e) {

@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -140,11 +140,15 @@ public class BatchUpdateTaskService extends AbstractBatch {
         timesheetLineRepo
             .all()
             .filter(
-                "(self.teamTask.parentTask.invoicingType = :_invoicingType OR "
-                    + "self.teamTask.invoicingType = :_invoicingType) "
-                    + "AND self.teamTask.toInvoice = :_teamTaskToInvoice "
+                "((self.teamTask.parentTask.invoicingType = :_invoicingType "
+                    + "AND self.teamTask.parentTask.toInvoice = :_teamTaskToInvoice) "
+                    + " OR (self.teamTask.parentTask IS NULL "
+                    + "AND self.teamTask.invoicingType = :_invoicingType "
+                    + "AND self.teamTask.toInvoice = :_teamTaskToInvoice)) "
+                    + "AND self.teamTask.project.isBusinessProject = :_isBusinessProject "
                     + "AND self.toInvoice = :_toInvoice")
             .bind("_invoicingType", TeamTaskRepository.INVOICING_TYPE_TIME_SPENT)
+            .bind("_isBusinessProject", true)
             .bind("_teamTaskToInvoice", true)
             .bind("_toInvoice", false)
             .order("id");

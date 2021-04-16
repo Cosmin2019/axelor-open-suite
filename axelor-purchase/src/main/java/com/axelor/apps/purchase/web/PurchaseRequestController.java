@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -67,11 +67,11 @@ public class PurchaseRequestController {
   public void generatePo(ActionRequest request, ActionResponse response) {
     @SuppressWarnings("unchecked")
     List<Long> requestIds = (List<Long>) request.getContext().get("_ids");
-    Boolean groupBySupplier = (Boolean) request.getContext().get("groupBySupplier");
-    groupBySupplier = groupBySupplier == null ? false : groupBySupplier;
-    Boolean groupByProduct = (Boolean) request.getContext().get("groupByProduct");
-    groupByProduct = groupByProduct == null ? false : groupByProduct;
     if (requestIds != null && !requestIds.isEmpty()) {
+      Boolean groupBySupplier = (Boolean) request.getContext().get("groupBySupplier");
+      groupBySupplier = groupBySupplier == null ? false : groupBySupplier;
+      Boolean groupByProduct = (Boolean) request.getContext().get("groupByProduct");
+      groupByProduct = groupByProduct == null ? false : groupByProduct;
       try {
         List<PurchaseRequest> purchaseRequests =
             Beans.get(PurchaseRequestRepository.class)

@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -98,7 +98,7 @@ public class OperationOrderServiceImpl implements OperationOrderService {
       ManufOrder manufOrder,
       int priority,
       WorkCenter workCenter,
-      Machine machineWorkCenter,
+      Machine machine,
       MachineTool machineTool,
       ProdProcessLine prodProcessLine)
       throws AxelorException {
@@ -115,7 +115,7 @@ public class OperationOrderServiceImpl implements OperationOrderService {
             operationName,
             manufOrder,
             workCenter,
-            machineWorkCenter,
+            machine,
             OperationOrderRepository.STATUS_DRAFT,
             prodProcessLine,
             machineTool);

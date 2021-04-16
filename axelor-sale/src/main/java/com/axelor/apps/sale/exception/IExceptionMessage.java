@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -73,4 +73,6 @@ public interface IExceptionMessage {
 
   static final String SALE_ORDER_EDIT_ORDER_NOTIFY = /*$$(*/
       "At least one sale order line has a stock move with availability request." /*)*/;
+
+  static final String COPY = /*$$(*/ "copy" /*)*/;
 }

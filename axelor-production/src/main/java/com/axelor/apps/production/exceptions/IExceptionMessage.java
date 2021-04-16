@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -38,6 +38,9 @@ public interface IExceptionMessage {
 
   static final String CANNOT_DELETE_REALIZED_STOCK_MOVE_LINES = /*$$(*/
       "You cannot delete realized stock move lines." /*)*/;
+
+  static final String CHECK_BOM_AND_PROD_PROCESS = /*$$(*/
+      "The production process and the bill of material must be applicable" /*)*/;
 
   /** Batch Compute work in progress valuation */
   static final String BATCH_COMPUTE_VALUATION = /*$$(*/ "Computed work in progress valuation" /*)*/;

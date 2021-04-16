@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -125,7 +125,6 @@ public class SaleOrderServiceSupplychainImpl extends SaleOrderServiceImpl
         stockMoves.size() != allStockMoves.size() ? true : checkAvailabiltyRequest;
     if (!stockMoves.isEmpty()) {
       StockMoveService stockMoveService = Beans.get(StockMoveService.class);
-      StockMoveRepository stockMoveRepository = Beans.get(StockMoveRepository.class);
       CancelReason cancelReason = appSupplychain.getCancelReasonOnChangingSaleOrder();
       if (cancelReason == null) {
         throw new AxelorException(
@@ -134,14 +133,11 @@ public class SaleOrderServiceSupplychainImpl extends SaleOrderServiceImpl
             IExceptionMessage.SUPPLYCHAIN_MISSING_CANCEL_REASON_ON_CHANGING_SALE_ORDER);
       }
       for (StockMove stockMove : stockMoves) {
-        if (stockMove.getStatusSelect().equals(StockMoveRepository.STATUS_DRAFT)) {
-          stockMoveService.cancel(stockMove, cancelReason);
-          stockMoveRepository.remove(stockMove);
-        } else {
-          stockMoveService.cancel(stockMove, cancelReason);
-          for (StockMoveLine stockMoveline : stockMove.getStockMoveLineList()) {
-            stockMoveline.setSaleOrderLine(null);
-          }
+        stockMoveService.cancel(stockMove, cancelReason);
+        stockMove.setArchived(true);
+        for (StockMoveLine stockMoveline : stockMove.getStockMoveLineList()) {
+          stockMoveline.setSaleOrderLine(null);
+          stockMoveline.setArchived(true);
         }
       }
     }

@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -125,13 +125,13 @@ public class PurchaseOrderInvoiceServiceImpl implements PurchaseOrderInvoiceServ
     List<InvoiceLine> invoiceLineList = new ArrayList<InvoiceLine>();
 
     for (PurchaseOrderLine purchaseOrderLine : purchaseOrderLineList) {
-
       processPurchaseOrderLine(invoice, invoiceLineList, purchaseOrderLine);
     }
     return invoiceLineList;
   }
 
-  protected void processPurchaseOrderLine(
+  @Override
+  public void processPurchaseOrderLine(
       Invoice invoice, List<InvoiceLine> invoiceLineList, PurchaseOrderLine purchaseOrderLine)
       throws AxelorException {
     invoiceLineList.addAll(this.createInvoiceLine(invoice, purchaseOrderLine));

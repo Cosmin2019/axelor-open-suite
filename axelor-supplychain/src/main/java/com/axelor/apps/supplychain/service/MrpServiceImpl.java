@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -170,6 +170,7 @@ public class MrpServiceImpl implements MrpService {
         .remove();
 
     mrp.setStatusSelect(MrpRepository.STATUS_DRAFT);
+    mrp.setErrorLog(null);
 
     mrpRepository.save(mrp);
   }
@@ -1171,5 +1172,12 @@ public class MrpServiceImpl implements MrpService {
   @Transactional(rollbackOn = {Exception.class})
   public void undoManualChanges(Mrp mrp) {
     mrpLineRepository.all().filter("self.mrp.id = ?1", mrp.getId()).update("isEditedByUser", false);
+  }
+
+  @Override
+  @Transactional
+  public void onError(Mrp mrp, Exception e) {
+    reset(mrp);
+    mrp.setErrorLog(e.getMessage());
   }
 }

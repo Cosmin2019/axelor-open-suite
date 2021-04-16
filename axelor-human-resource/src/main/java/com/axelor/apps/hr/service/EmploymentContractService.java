@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -117,7 +117,11 @@ public class EmploymentContractService {
         item[6] = mainAddress.getAddressL4();
         item[7] = mainAddress.getAddressL2();
         item[8] = mainAddress.getZip();
-        item[9] = mainAddress.getCity().getName();
+        if (mainAddress.getCity() != null) {
+          item[9] = mainAddress.getCity().getName();
+        } else {
+          item[9] = "";
+        }
       }
 
       item[10] = contactPartner.getMobilePhone();

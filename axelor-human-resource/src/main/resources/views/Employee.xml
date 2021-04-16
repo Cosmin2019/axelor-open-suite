@@ -72,7 +72,7 @@
       <field name="maritalStatus" colSpan="4"/>
       <field name="sexSelect" colSpan="4"/>
       <field name="countryOfBirth" colSpan="4" onChange="action-employee-attrs-country-of-birth-on-change"/>
-      <field name="departmentOfBirth" colSpan="4" onChange="action-employee-attrs-department-of-birth-on-change" onSelect="action-employee-attrs-department-of-birth-on-select"/>
+      <field name="departmentOfBirth" colSpan="4" grid-view="hr-department-grid" onChange="action-employee-attrs-department-of-birth-on-change" onSelect="action-employee-attrs-department-of-birth-on-select"/>
       <field name="cityOfBirth" colSpan="4" onSelect="action-employee-attrs-city-of-birth-on-select"/>
       <field name="citizenship" colSpan="4"/>
       <field name="maritalName" colSpan="4"/>
@@ -211,7 +211,7 @@
           <field name="maritalStatus" colSpan="4"/>
           <field name="sexSelect" colSpan="4"/>
           <field name="countryOfBirth" colSpan="4" onChange="action-employee-attrs-country-of-birth-on-change"/>
-          <field name="departmentOfBirth" colSpan="4" onChange="action-employee-attrs-department-of-birth-on-change" onSelect="action-employee-attrs-department-of-birth-on-select"/>
+          <field name="departmentOfBirth" colSpan="4" grid-view="hr-department-grid" onChange="action-employee-attrs-department-of-birth-on-change" onSelect="action-employee-attrs-department-of-birth-on-select"/>
           <field name="cityOfBirth" colSpan="4" onSelect="action-employee-attrs-city-of-birth-on-select"/>
           <field name="citizenship" colSpan="4"/>
           <field name="maritalName" colSpan="4"/>
@@ -514,15 +514,11 @@
     <action-method name="action-print-employee-phonebook" >
 		<call class="com.axelor.apps.hr.web.EmployeeController" method="printEmployeePhonebook"/>
 	</action-method>
-	
-	<action-method name="action-employee-method-print-employee-report" >
-		<call class="com.axelor.apps.hr.web.EmployeeController" method="printEmployeeReport"/>
-	</action-method>
 
 	<action-method name="action-employee-method-print-employee-report" >
 		<call class="com.axelor.apps.hr.web.EmployeeController" method="printEmployeeReport"/>
 	</action-method>
-	
+
 	<action-condition name="action-employee-validate-dates">
 		<check error="Invalid date" field="endDate" if="startDate != null &amp;&amp; endDate != null  &amp;&amp; (endDate &lt; startDate)"/>
 	</action-condition>

@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -463,41 +463,5 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
       }
       purchaseOrderRepo.save(purchaseOrder);
     }
-  }
-
-  @Override
-  @Transactional
-  public void draftPurchaseOrder(PurchaseOrder purchaseOrder) {
-
-    purchaseOrder.setStatusSelect(PurchaseOrderRepository.STATUS_DRAFT);
-    purchaseOrderRepo.save(purchaseOrder);
-  }
-
-  @Override
-  @Transactional(rollbackOn = {Exception.class})
-  public void validatePurchaseOrder(PurchaseOrder purchaseOrder) throws AxelorException {
-    computePurchaseOrder(purchaseOrder);
-
-    purchaseOrder.setStatusSelect(PurchaseOrderRepository.STATUS_VALIDATED);
-    purchaseOrder.setValidationDate(appPurchaseService.getTodayDate(purchaseOrder.getCompany()));
-    purchaseOrder.setValidatedByUser(AuthUtils.getUser());
-
-    purchaseOrder.setSupplierPartner(validateSupplier(purchaseOrder));
-
-    updateCostPrice(purchaseOrder);
-  }
-
-  @Override
-  @Transactional
-  public void finishPurchaseOrder(PurchaseOrder purchaseOrder) {
-    purchaseOrder.setStatusSelect(PurchaseOrderRepository.STATUS_FINISHED);
-    purchaseOrderRepo.save(purchaseOrder);
-  }
-
-  @Override
-  @Transactional
-  public void cancelPurchaseOrder(PurchaseOrder purchaseOrder) {
-    purchaseOrder.setStatusSelect(PurchaseOrderRepository.STATUS_CANCELED);
-    purchaseOrderRepo.save(purchaseOrder);
   }
 }

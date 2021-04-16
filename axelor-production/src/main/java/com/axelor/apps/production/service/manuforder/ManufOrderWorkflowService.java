@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -121,12 +121,12 @@ public class ManufOrderWorkflowService {
     for (ManufOrder manufOrder : manufOrderList) {
       if (manufOrder.getBillOfMaterial().getStatusSelect()
               != BillOfMaterialRepository.STATUS_APPLICABLE
-          && manufOrder.getProdProcess().getStatusSelect()
+          || manufOrder.getProdProcess().getStatusSelect()
               != ProdProcessRepository.STATUS_APPLICABLE) {
         throw new AxelorException(
             manufOrder,
             TraceBackRepository.CATEGORY_INCONSISTENCY,
-            I18n.get("Bill of material and production process must be applicable"));
+            I18n.get(IExceptionMessage.CHECK_BOM_AND_PROD_PROCESS));
       }
 
       if (sequenceService.isEmptyOrDraftSequenceNumber(manufOrder.getManufOrderSeq())) {
@@ -134,6 +134,8 @@ public class ManufOrderWorkflowService {
       }
       if (CollectionUtils.isEmpty(manufOrder.getOperationOrderList())) {
         manufOrderService.preFillOperations(manufOrder);
+      } else {
+        manufOrderService.updateOperationsName(manufOrder);
       }
       if (!manufOrder.getIsConsProOnOperation()
           && CollectionUtils.isEmpty(manufOrder.getToConsumeProdProductList())) {
@@ -193,6 +195,16 @@ public class ManufOrderWorkflowService {
 
   @Transactional(rollbackOn = {Exception.class})
   public void start(ManufOrder manufOrder) throws AxelorException {
+
+    if (manufOrder.getBillOfMaterial().getStatusSelect()
+            != BillOfMaterialRepository.STATUS_APPLICABLE
+        || manufOrder.getProdProcess().getStatusSelect()
+            != ProdProcessRepository.STATUS_APPLICABLE) {
+      throw new AxelorException(
+          manufOrder,
+          TraceBackRepository.CATEGORY_INCONSISTENCY,
+          I18n.get(IExceptionMessage.CHECK_BOM_AND_PROD_PROCESS));
+    }
 
     manufOrder.setRealStartDateT(
         Beans.get(AppProductionService.class).getTodayDateTime().toLocalDateTime());

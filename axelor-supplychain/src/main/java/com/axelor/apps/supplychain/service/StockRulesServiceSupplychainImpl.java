@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -31,6 +31,7 @@ import com.axelor.apps.purchase.db.PurchaseOrder;
 import com.axelor.apps.purchase.db.SupplierCatalog;
 import com.axelor.apps.purchase.db.repo.PurchaseOrderRepository;
 import com.axelor.apps.purchase.service.PurchaseOrderLineService;
+import com.axelor.apps.purchase.service.PurchaseOrderService;
 import com.axelor.apps.purchase.service.app.AppPurchaseService;
 import com.axelor.apps.stock.db.StockConfig;
 import com.axelor.apps.stock.db.StockLocation;
@@ -124,12 +125,12 @@ public class StockRulesServiceSupplychainImpl extends StockRulesServiceImpl {
           Company company = stockLocation.getCompany();
           LocalDate today = Beans.get(AppBaseService.class).getTodayDate(company);
 
-          PurchaseOrderServiceSupplychainImpl purchaseOrderServiceSupplychainImpl =
-              Beans.get(PurchaseOrderServiceSupplychainImpl.class);
+          PurchaseOrderSupplychainService purchaseOrderSupplychainService =
+              Beans.get(PurchaseOrderSupplychainService.class);
 
           PurchaseOrder purchaseOrder =
               purchaseOrderRepo.save(
-                  purchaseOrderServiceSupplychainImpl.createPurchaseOrder(
+                  purchaseOrderSupplychainService.createPurchaseOrder(
                       AuthUtils.getUser(),
                       company,
                       null,
@@ -148,7 +149,7 @@ public class StockRulesServiceSupplychainImpl extends StockRulesServiceImpl {
               purchaseOrderLineService.createPurchaseOrderLine(
                   purchaseOrder, product, null, null, qtyToOrder, product.getUnit()));
 
-          purchaseOrderServiceSupplychainImpl.computePurchaseOrder(purchaseOrder);
+          Beans.get(PurchaseOrderService.class).computePurchaseOrder(purchaseOrder);
 
           purchaseOrderRepo.save(purchaseOrder);
           if (stockRules.getAlert()) {

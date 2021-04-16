@@ -1,7 +1,7 @@
 /*
  * Axelor Business Solutions
  *
- * Copyright (C) 2020 Axelor (<http://axelor.com>).
+ * Copyright (C) 2021 Axelor (<http://axelor.com>).
  *
  * This program is free software: you can redistribute it and/or  modify
  * it under the terms of the GNU Affero General Public License, version 3,
@@ -100,12 +100,4 @@ public interface PurchaseOrderService {
       throws AxelorException;
 
   public void updateCostPrice(PurchaseOrder purchaseOrder) throws AxelorException;
-
-  public void draftPurchaseOrder(PurchaseOrder purchaseOrder);
-
-  public void validatePurchaseOrder(PurchaseOrder purchaseOrder) throws AxelorException;
-
-  public void finishPurchaseOrder(PurchaseOrder purchaseOrder);
-
-  public void cancelPurchaseOrder(PurchaseOrder purchaseOrder);
 }
